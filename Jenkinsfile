@@ -22,7 +22,7 @@ pipeline {
                                 credentialsId: 'docker-nexus', 
                                 usernameVariable: 'USERNAME', 
                                 passwordVariable: 'PASSWORD']]){
-                    sh 'docker login 192.168.1.9:8083 -u $USERNAME -p $PASSWORD'
+                    sh 'docker login http://192.168.1.9:8083 -u $USERNAME -p $PASSWORD'
                     sh 'docker tag microservicio:latest 192.168.1.9:8083/repository/docker-private/microservicio:latest'
                     sh 'docker push 192.168.1.9:8083/repository/docker-private/microservicio:latest'
                 }
