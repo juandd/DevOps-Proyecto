@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools{
+        mavne 'maven_3_8_6'
+    }
 
     stages {
         //Validacion utilizando servidor SonarQube
