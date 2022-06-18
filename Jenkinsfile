@@ -12,6 +12,7 @@ pipeline {
         stage('DBDeploy') {
             steps {
                 sh 'docker images'
+                sh 'docker run -d -p 8081: microservicio'
             }
         }
     }
