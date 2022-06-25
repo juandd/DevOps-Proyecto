@@ -54,6 +54,7 @@ pipeline {
         //Stress
         stage('Stress') {
             steps {
+                sleep 5
                 dir('GatlingTest/'){
                     sh 'mvn gatling:test -Dgatling.simulationClass=microservice.PingUsersSimulation'
                 }
