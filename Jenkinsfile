@@ -6,13 +6,13 @@ pipeline {
 
     stages {
         //El proyecto compila con un dockerfile multistage
-        /*stage('Compile') {
+        stage('Compile') {
             steps {
                 dir('Servicios/Curso-Microservicios'){
                     sh 'docker build -t microservicio .'
                 }
             }
-        }*/
+        }
         //Se sube la imágen a nexus
         /*stage('Push Image') {
             steps {
@@ -26,10 +26,10 @@ pipeline {
                 }
             }
         }*/
-        //Liquidbase
+        //Liquibase
         stage('database') {
             steps {
-                dir('liquidbase/'){
+                dir('liquibase/'){
                     sh '/opt/liquibase/liquibase --changeLogFile="changesets/db.changelog-master.xml" update'
                 }
             }
