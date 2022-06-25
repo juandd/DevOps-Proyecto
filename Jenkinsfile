@@ -32,7 +32,7 @@ pipeline {
         stage('Deploy service') {
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', 
-                                credentialsId: 'docker_nexus', 
+                                credentialsId: 'docker-nexus', 
                                 usernameVariable: 'USERNAME', 
                                 passwordVariable: 'PASSWORD']]) {
                     sh 'docker login 192.168.1.11:8083 -u $USERNAME -p $PASSWORD'
