@@ -13,8 +13,9 @@ pipeline {
                 }
             }
         }
+        
         //Se sube la imágen a nexus
-        /*stage('Push Image') {
+        stage('Push Image') {
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', 
                                 credentialsId: 'docker-nexus', 
@@ -25,12 +26,36 @@ pipeline {
                     sh 'docker push 192.168.1.11:8083/repository/docker-private/microservicio:latest'
                 }
             }
-        }*/
+        }
+
+        //Correr imágen desde repositorio
+        stage('Deploy service') {
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', 
+                                credentialsId: 'docker_nexus', 
+                                usernameVariable: 'USERNAME', 
+                                passwordVariable: 'PASSWORD']]) {
+                    sh 'docker login 192.168.1.11:8083 -u $USERNAME -p $PASSWORD'
+                    sh 'docker stop microservicio-one || true'
+                    sh 'docker run -d --rm --name microservicio-one -e SPRING_PROFILES_ACTIVE=dev -p 8090:8090 192.168.1.11:8083/repository/docker-private/microservicio:latest'
+                }
+            }
+        }
+
         //Liquibase
         stage('database') {
             steps {
                 dir('liquibase/'){
                     sh '/opt/liquibase/liquibase --changeLogFile="changesets/db.changelog-master.xml" update'
+                }
+            }
+        }
+
+        //Stress
+        stage('Stress') {
+            steps {
+                dir('GatlingTest/'){
+                    sh 'mvn gatling:test -Dgatling.simulationClass=microservice.PingUsersSimulation'
                 }
             }
         }
